@@ -27,9 +27,14 @@ class Price(BaseModel):
     discounted_price: str = Field(..., alias="discountedPrice")
 
 
+class Platform(str, enum.Enum):
+    PS4 = "PS4"
+    PS5 = "PS5"
+
+
 class Product(BaseModel):
     name: str
-    platforms: list[str]
+    platforms: list[Platform]
     typename: str = Field(..., alias="__typename")
     id: str
     localized_store_display_classification: ProductClassification = Field(
