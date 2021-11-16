@@ -1,12 +1,39 @@
 import enum
+from typing import Optional
 
 from pydantic import BaseModel, Field
+
+
+class Typename(str, enum.Enum):
+    SKU_PRICE = "SkuPrice"
+    SKU = "Sku"
+    MEDIA = "Media"
+    PRODUCT = "Product"
+    PAGE_INFO = "PageInfo"
+    CATEGORY_GRID = "CategoryGrid"
 
 
 class ProductClassification(str, enum.Enum):
     FULL_GAME = "Полная версия игры"
     PREMIUM_EDITION = "Премиум-издание"
-    DEMO_VERSION = "Демо-версия"
+    GAME_BUNDLE = "Игровой комплект"
+    ADDON_PACK = "Пакет дополнений"
+    LEVEL = "Уровень"
+    GAME_APPLICATION = "Игровое приложение"
+    DEMO = "Демо-версия"
+    OTHER = "Дополнение"
+
+
+class MediaRole(str, enum.Enum):
+    BACKGROUND = 'BACKGROUND'
+    EDITION_KEY_ART = 'EDITION_KEY_ART'
+    FOUR_BY_THREE_BANNER = 'FOUR_BY_THREE_BANNER'
+    GAME_HUB_COVER_ART = 'GAMEHUB_COVER_ART'
+    LOGO = 'LOGO'
+    MASTER = 'MASTER'
+    PORTRAIT_BANNER = 'PORTRAIT_BANNER'
+    PREVIEW = 'PREVIEW'
+    SCREENSHOT = 'SCREENSHOT'
 
 
 class MediaType(str, enum.Enum):
@@ -14,17 +41,27 @@ class MediaType(str, enum.Enum):
     IMAGE = "IMAGE"
 
 
+class PageInfo(BaseModel):
+    typename: Typename = Field(..., alias="__typename")
+    is_last: bool = Field(..., alias="isLast")
+    total_count: int = Field(..., alias="totalCount")
+
+
 class Media(BaseModel):
-    typename: str = Field(..., alias="__typename")
+    typename: Typename = Field(..., alias="__typename")
     type: MediaType
     url: str
-    role: str
+    role: MediaRole
 
 
 class Price(BaseModel):
-    typename: str = Field(..., alias="__typename")
+    typename: Typename = Field(..., alias="__typename")
     base_price: str = Field(..., alias="basePrice")
     discounted_price: str = Field(..., alias="discountedPrice")
+    is_free: bool = Field(..., alias="isFree")
+    is_tied_to_subscription: Optional[bool] = Field(None, alias="isTiedToSubscription")
+    is_exclusive: bool = Field(..., alias="isExclusive")
+    discount_text: Optional[str] = Field(None, alias="discountText")
 
 
 class Platform(str, enum.Enum):
@@ -35,8 +72,9 @@ class Platform(str, enum.Enum):
 class Product(BaseModel):
     name: str
     platforms: list[Platform]
-    typename: str = Field(..., alias="__typename")
+    typename: Typename = Field(..., alias="__typename")
     id: str
+    np_title_id: str = Field(..., alias="npTitleId")
     localized_store_display_classification: ProductClassification = Field(
         ...,
         alias="localizedStoreDisplayClassification"
@@ -47,6 +85,10 @@ class Product(BaseModel):
 
 class CategoryGridRetrieve(BaseModel):
     products: list[Product]
+    typename: Typename = Field(..., alias="__typename")
+    id: str
+    reporting_name: str = Field(..., alias="reportingName")
+    page_info: PageInfo = Field(..., alias="pageInfo")
 
 
 class Data(BaseModel):
