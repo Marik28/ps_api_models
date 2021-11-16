@@ -69,6 +69,16 @@ class Platform(str, enum.Enum):
     PS5 = "PS5"
 
 
+class SkuType(str, enum.Enum):
+    STANDARD = "STANDARD"
+    PREORDER = "PREORDER"
+
+
+class Skus(BaseModel):
+    typename: Typename = Field(..., alias="__typename")
+    type: SkuType
+
+
 class Product(BaseModel):
     name: str
     platforms: list[Platform]
@@ -81,6 +91,7 @@ class Product(BaseModel):
     )
     media: list[Media]
     price: Price
+    skus: list[Skus]
 
 
 class CategoryGridRetrieve(BaseModel):
