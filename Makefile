@@ -1,0 +1,2 @@
+test:
+	export PYTHONPATH=.; pytest
