@@ -64,6 +64,6 @@ class Product(Base):
     )
 
     __table_args__ = (
-        CheckConstraint("base_price_in_rubles >= 0", name="positive_base_price_in_rubles_constraint"),
-        CheckConstraint("discounted_price_in_rubles >= 0", name="positive_discounted_price_in_rubles_constraint"),
+        CheckConstraint("base_price_in_rubles > 0", name="positive_base_price_in_rubles_constraint"),
+        CheckConstraint("discounted_price_in_rubles > 0", name="positive_discounted_price_in_rubles_constraint"),
     )
