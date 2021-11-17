@@ -5,6 +5,8 @@ from settings import settings
 from tables import Base
 
 
+# todo добавить отдельную бд для тестов
+
 def test_insert_products():
     """Тест не должен падать"""
     Base.metadata.create_all(engine)
