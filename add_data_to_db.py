@@ -49,7 +49,12 @@ def parse_product(session: sqlalchemy.orm.Session, product: models.Product) -> t
     )
 
 
+def is_free(product: models.Product) -> bool:
+    return product.price.is_free or product.price.base_price == "Недоступно"
+
+
 def insert_products(session: sqlalchemy.orm.Session, products: list[models.Product]):
-    products_to_create = [parse_product(session, product) for product in products if not product.price.is_free]
+    products_to_create = [parse_product(session, product) for product in products
+                          if not is_free(product)]
     session.add_all(products_to_create)
     session.commit()
