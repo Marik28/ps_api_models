@@ -12,7 +12,7 @@ from sqlalchemy import (
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 
-from models import ProductClassification, Platform as PlatformModel
+from models import ProductClassification, Platform as PlatformModel, UpsellServiceBranding
 
 Base = declarative_base()
 
@@ -26,6 +26,15 @@ platform_and_product_association_table = Table(
     Column('product_id', ForeignKey('products.id')),
     Column('platform_id', ForeignKey('platforms.id'))
 )
+
+
+# todo доделать
+class ExtraDiscount(Base):
+    __tablename__ = "extra_discounts"
+
+    id = Column(Integer(), primary_key=True, autoincrement=True)
+    upsell_service_branding = Column(Enum(UpsellServiceBranding))
+    discount_percentage = ...
 
 
 class Platform(Base):
