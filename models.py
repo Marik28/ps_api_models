@@ -46,12 +46,18 @@ class PageInfo(BaseModel):
     is_last: bool = Field(..., alias="isLast")
     total_count: int = Field(..., alias="totalCount")
 
+    class Config:
+        allow_population_by_field_name = True
+
 
 class Media(BaseModel):
     typename: Typename = Field(..., alias="__typename")
     type: MediaType
     url: str
     role: MediaRole
+
+    class Config:
+        allow_population_by_field_name = True
 
 
 class Price(BaseModel):
@@ -62,6 +68,9 @@ class Price(BaseModel):
     is_tied_to_subscription: Optional[bool] = Field(None, alias="isTiedToSubscription")
     is_exclusive: bool = Field(..., alias="isExclusive")
     discount_text: Optional[str] = Field(None, alias="discountText")
+
+    class Config:
+        allow_population_by_field_name = True
 
 
 class Platform(str, enum.Enum):
@@ -78,6 +87,9 @@ class Skus(BaseModel):
     typename: Typename = Field(..., alias="__typename")
     type: SkuType
 
+    class Config:
+        allow_population_by_field_name = True
+
 
 class Product(BaseModel):
     name: str
@@ -90,8 +102,11 @@ class Product(BaseModel):
         alias="localizedStoreDisplayClassification"
     )
     media: list[Media]
-    price: Price
+    price: Optional[Price]
     skus: list[Skus]
+
+    class Config:
+        allow_population_by_field_name = True
 
 
 class CategoryGridRetrieve(BaseModel):
@@ -101,9 +116,15 @@ class CategoryGridRetrieve(BaseModel):
     reporting_name: str = Field(..., alias="reportingName")
     page_info: PageInfo = Field(..., alias="pageInfo")
 
+    class Config:
+        allow_population_by_field_name = True
+
 
 class Data(BaseModel):
     category_grid_retrieve: CategoryGridRetrieve = Field(..., alias="categoryGridRetrieve")
+
+    class Config:
+        allow_population_by_field_name = True
 
 
 class ApiResponse(BaseModel):
