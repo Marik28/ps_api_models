@@ -2,3 +2,4 @@ pydantic
 requests
 sqlalchemy
 pytest
+typer

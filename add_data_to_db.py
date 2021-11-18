@@ -1,4 +1,6 @@
 import sqlalchemy.orm
+import typer
+from sqlalchemy.exc import IntegrityError
 
 import models
 import tables
@@ -16,6 +18,7 @@ def parse_product(session: sqlalchemy.orm.Session, product: models.Product) -> t
 
     classification = product.localized_store_display_classification.value
 
+    assert product.price is not None, "Должна присутствовать цена"
     assert len(product.skus) > 0, "Обычно тут только одно значение лежит"
     is_preorder = product.skus[0].type == models.SkuType.PREORDER
 
@@ -50,11 +53,21 @@ def parse_product(session: sqlalchemy.orm.Session, product: models.Product) -> t
 
 
 def is_free(product: models.Product) -> bool:
-    return product.price.is_free or product.price.base_price == "Недоступно"
+    return product.price is None or product.price.is_free or product.price.base_price == "Недоступно"
 
 
 def insert_products(session: sqlalchemy.orm.Session, products: list[models.Product]):
     products_to_create = [parse_product(session, product) for product in products
                           if not is_free(product)]
-    session.add_all(products_to_create)
-    session.commit()
+    with typer.progressbar(
+            products_to_create,
+            fill_char="█",
+            empty_char=" ",
+            bar_template="%(label)s  %(bar)s  %(info)s",
+    ) as progress:
+        for product in progress:
+            session.add(product)
+            try:
+                session.commit()
+            except IntegrityError:
+                session.rollback()
