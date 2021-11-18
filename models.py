@@ -4,6 +4,11 @@ from typing import Optional
 from pydantic import BaseModel, Field
 
 
+class UpsellServiceBranding(str, enum.Enum):
+    PS_PLUS = "PS_PLUS"
+    EA_ACCESS = "ACCESS"
+
+
 class Typename(str, enum.Enum):
     SKU_PRICE = "SkuPrice"
     SKU = "Sku"
