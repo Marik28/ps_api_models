@@ -22,6 +22,8 @@ class ProductClassification(str, enum.Enum):
     GAME_APPLICATION = "Игровое приложение"
     DEMO = "Демо-версия"
     OTHER = "Дополнение"
+    SOUNDTRACK = "Звуковое сопровождение"
+    BUNDLE = "Комплект"
 
 
 class MediaRole(str, enum.Enum):
