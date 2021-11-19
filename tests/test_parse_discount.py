@@ -1,4 +1,4 @@
-from services import parse_discount
+from services.parsing import parse_discount
 
 
 def test_parse_discount():

@@ -1,6 +1,7 @@
 import models
-from add_data_to_db import insert_platforms, insert_products
 from database import Session, engine
+from services.platforms import insert_platforms
+from services.products import insert_products
 from settings import settings
 from tables import Base
 

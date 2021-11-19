@@ -4,7 +4,7 @@ from pathlib import Path
 import typer
 
 import models
-from add_data_to_db import insert_products
+from services.products import insert_products
 from database import Session
 
 app = typer.Typer()

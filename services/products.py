@@ -4,13 +4,25 @@ from sqlalchemy.exc import IntegrityError
 
 import models
 import tables
-from services import parse_price, parse_discount, get_platform_by_name
+from services.parsing import parse_price, parse_discount
+from services.platforms import get_platform_by_name
 
 
-def insert_platforms(session: sqlalchemy.orm.Session):
-    platforms = [tables.Platform(name=platform.value) for platform in models.Platform]
-    session.add_all(platforms)
-    session.commit()
+def insert_products(session: sqlalchemy.orm.Session, products: list[models.Product]):
+    products_to_create = [parse_product(session, product) for product in products
+                          if not is_free(product)]
+    with typer.progressbar(
+            products_to_create,
+            fill_char="█",
+            empty_char=" ",
+            bar_template="%(label)s  %(bar)s  %(info)s",
+    ) as progress:
+        for product in progress:
+            session.add(product)
+            try:
+                session.commit()
+            except IntegrityError:
+                session.rollback()
 
 
 def parse_product(session: sqlalchemy.orm.Session, product: models.Product) -> tables.Product:
@@ -54,20 +66,3 @@ def parse_product(session: sqlalchemy.orm.Session, product: models.Product) -> t
 
 def is_free(product: models.Product) -> bool:
     return product.price is None or product.price.is_free or product.price.base_price == "Недоступно"
-
-
-def insert_products(session: sqlalchemy.orm.Session, products: list[models.Product]):
-    products_to_create = [parse_product(session, product) for product in products
-                          if not is_free(product)]
-    with typer.progressbar(
-            products_to_create,
-            fill_char="█",
-            empty_char=" ",
-            bar_template="%(label)s  %(bar)s  %(info)s",
-    ) as progress:
-        for product in progress:
-            session.add(product)
-            try:
-                session.commit()
-            except IntegrityError:
-                session.rollback()

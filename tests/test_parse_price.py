@@ -1,4 +1,4 @@
-from services import parse_price
+from services.parsing import parse_price
 
 
 def test_parse_price_with_dot():
