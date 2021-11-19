@@ -49,8 +49,8 @@ def get_all_platform_games(platform_key: Union[str, PLATFORMS] = PLATFORMS.PS4_G
             raise Exception(f"Ответ сервера плохой: {response.status_code}, {response.text}")
 
         api_response: ApiResponse = ApiResponse.parse_raw(response.text)
-        typer.echo(f"Получено {len(products)} из {api_response.data.category_grid_retrieve.page_info.total_count}")
         products.extend(api_response.data.category_grid_retrieve.products)
+        typer.echo(f"Получено {len(products)} из {api_response.data.category_grid_retrieve.page_info.total_count}")
 
         if api_response.data.category_grid_retrieve.page_info.is_last:
             break
