@@ -66,8 +66,10 @@ def save_products(products: list[models.Product], filename: str, directory: Opti
     if directory is None:
         directory = settings.base_dir
 
-    with open(directory / filename, "w") as f:
+    file_full_path = directory / filename
+    with open(file_full_path, "w") as f:
         json.dump([product.dict() for product in products], f, indent=2, ensure_ascii=False)
+    typer.echo(f"Данные сохранены в {file_full_path}")
 
 
 @app.command()
