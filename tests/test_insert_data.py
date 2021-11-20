@@ -1,7 +1,8 @@
-import models
+from typer.testing import CliRunner
+
 from database import Session, engine
+from scripts.insert_products import app
 from services.platforms import insert_platforms
-from services.products import insert_products
 from settings import settings
 from tables import Base
 
@@ -9,6 +10,7 @@ from tables import Base
 # todo добавить отдельную бд для тестов
 
 def test_insert_products():
+    runner = CliRunner()
     """Тест не должен падать"""
     Base.metadata.create_all(engine)
     with Session() as session:
@@ -16,6 +18,4 @@ def test_insert_products():
             insert_platforms(session)
         except Exception as e:
             print("ошибка", e)
-        r = models.ApiResponse.parse_file(settings.base_dir / "data/example_data.json")
-        products = r.data.category_grid_retrieve.products
-        insert_products(session, products)
+        runner.invoke(app, [str(settings.base_dir / "data/test_data.json")])
