@@ -6,7 +6,7 @@ from pydantic import BaseModel, Field
 
 class UpsellServiceBranding(str, enum.Enum):
     PS_PLUS = "PS_PLUS"
-    EA_ACCESS = "ACCESS"
+    EA_ACCESS = "EA_ACCESS"
 
 
 class Typename(str, enum.Enum):
@@ -75,6 +75,9 @@ class Price(BaseModel):
     is_tied_to_subscription: Optional[bool] = Field(None, alias="isTiedToSubscription")
     is_exclusive: bool = Field(..., alias="isExclusive")
     discount_text: Optional[str] = Field(None, alias="discountText")
+    service_branding: Optional[list] = Field(..., alias="serviceBranding")
+    upsell_service_branding: Optional[list[UpsellServiceBranding]] = Field(..., alias="upsellServiceBranding")
+    upsell_text: Optional[str] = Field(..., alias="upsellText")
 
     class Config:
         allow_population_by_field_name = True
