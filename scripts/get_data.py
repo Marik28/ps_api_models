@@ -89,8 +89,7 @@ def main(
         ),
 ):
     if filename is None:
-        filename = generate_filename(platform
-                                     )
+        filename = generate_filename(platform)
     products = get_all_platform_games(platform)
     save_products(products, filename, output_directory)
 
