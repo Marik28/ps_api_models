@@ -3,10 +3,12 @@ from typing import Optional
 
 from pydantic import BaseModel, Field
 
+from services.models_helpers import to_lower_camel_case
+
 
 class UpsellServiceBranding(str, enum.Enum):
     PS_PLUS = "PS_PLUS"
-    EA_ACCESS = "ACCESS"
+    EA_ACCESS = "EA_ACCESS"
 
 
 class Typename(str, enum.Enum):
@@ -50,11 +52,12 @@ class MediaType(str, enum.Enum):
 
 class PageInfo(BaseModel):
     typename: Typename = Field(..., alias="__typename")
-    is_last: bool = Field(..., alias="isLast")
-    total_count: int = Field(..., alias="totalCount")
+    is_last: bool
+    total_count: int
 
     class Config:
         allow_population_by_field_name = True
+        alias_generator = to_lower_camel_case
 
 
 class Media(BaseModel):
@@ -65,19 +68,24 @@ class Media(BaseModel):
 
     class Config:
         allow_population_by_field_name = True
+        alias_generator = to_lower_camel_case
 
 
 class Price(BaseModel):
     typename: Typename = Field(..., alias="__typename")
-    base_price: str = Field(..., alias="basePrice")
-    discounted_price: str = Field(..., alias="discountedPrice")
-    is_free: bool = Field(..., alias="isFree")
-    is_tied_to_subscription: Optional[bool] = Field(None, alias="isTiedToSubscription")
-    is_exclusive: bool = Field(..., alias="isExclusive")
-    discount_text: Optional[str] = Field(None, alias="discountText")
+    base_price: str
+    discounted_price: str
+    is_free: bool
+    is_tied_to_subscription: Optional[bool]
+    is_exclusive: bool
+    discount_text: Optional[str]
+    service_branding: Optional[list]
+    upsell_service_branding: Optional[list[UpsellServiceBranding]]
+    upsell_text: Optional[str]
 
     class Config:
         allow_population_by_field_name = True
+        alias_generator = to_lower_camel_case
 
 
 class Platform(str, enum.Enum):
@@ -96,6 +104,7 @@ class Skus(BaseModel):
 
     class Config:
         allow_population_by_field_name = True
+        alias_generator = to_lower_camel_case
 
 
 class Product(BaseModel):
@@ -103,35 +112,35 @@ class Product(BaseModel):
     platforms: list[Platform]
     typename: Typename = Field(..., alias="__typename")
     id: str
-    np_title_id: str = Field(..., alias="npTitleId")
-    localized_store_display_classification: ProductClassification = Field(
-        ...,
-        alias="localizedStoreDisplayClassification"
-    )
+    np_title_id: str
+    localized_store_display_classification: ProductClassification
     media: list[Media]
     price: Optional[Price]
     skus: list[Skus]
 
     class Config:
         allow_population_by_field_name = True
+        alias_generator = to_lower_camel_case
 
 
 class CategoryGridRetrieve(BaseModel):
     products: list[Product]
     typename: Typename = Field(..., alias="__typename")
     id: str
-    reporting_name: str = Field(..., alias="reportingName")
-    page_info: PageInfo = Field(..., alias="pageInfo")
+    reporting_name: str
+    page_info: PageInfo
 
     class Config:
         allow_population_by_field_name = True
+        alias_generator = to_lower_camel_case
 
 
 class Data(BaseModel):
-    category_grid_retrieve: CategoryGridRetrieve = Field(..., alias="categoryGridRetrieve")
+    category_grid_retrieve: CategoryGridRetrieve
 
     class Config:
         allow_population_by_field_name = True
+        alias_generator = to_lower_camel_case
 
 
 class ApiResponse(BaseModel):
