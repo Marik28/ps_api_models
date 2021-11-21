@@ -15,9 +15,9 @@ app = typer.Typer()
 
 
 class PLATFORMS(enum.Enum):
-    PS5_GAMES = "ps5_games"
-    PS4_GAMES = "ps4_games"
-    PS_VR_GAMES = "ps_vr_games"
+    PS5_GAMES = "ps5"
+    PS4_GAMES = "ps4"
+    PS_VR_GAMES = "ps_vr"
 
 
 query_ids = {
