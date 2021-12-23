@@ -59,7 +59,7 @@ def get_all_platform_games(platform_key: Union[str, PLATFORMS] = PLATFORMS.PS4_G
 
 
 def generate_filename(platform: PLATFORMS):
-    return f"{platform.value}_{datetime.datetime.now().strftime('%d-%m-%Y_%H:%M:%S')}.json"
+    return f"{platform.value}_{datetime.datetime.now().strftime('%d-%m-%Y_%H-%M-%S')}.json"
 
 
 def save_products(products: list[models.Product], filename: str, directory: Optional[Path] = None):
@@ -67,7 +67,7 @@ def save_products(products: list[models.Product], filename: str, directory: Opti
         directory = settings.base_dir
 
     file_full_path = directory / filename
-    with open(file_full_path, "w") as f:
+    with open(file_full_path, "w", encoding="utf-8") as f:
         json.dump([product.dict() for product in products], f, indent=2, ensure_ascii=False)
     typer.echo(f"Данные сохранены в {file_full_path}")
 
