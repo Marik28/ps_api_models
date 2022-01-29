@@ -3,3 +3,4 @@ requests
 sqlalchemy
 pytest
 typer
+notebook
