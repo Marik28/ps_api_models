@@ -4,3 +4,5 @@ sqlalchemy
 pytest
 typer
 notebook
+pandas
+numpy
